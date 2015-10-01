@@ -1,37 +1,23 @@
-from flask import Flask
-from os import environ
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 @app.route("/")
 @app.route("/hello")
-def say_hi():
-    return "Hello World!"
+@app.route("/home")
+def home():
+    return render_template('home.html')
 
-@app.route("/hello/<name>")
+@app.route("/<name>")
 def hello_person(name):
-    html = """
-        <h1>
-            Hello {}!
-        </h1>
-        <p>
-            Here's a picture of a kitten.  Awww...
-        </p>
-        <img src="http://placekitten.com/g/200/300">
-    """
-    return html.format(name.title())
+    return render_template('hello_person.html', uname=name)
 
-@app.route("/hello/<first>/<second>")
+
+@app.route("/<first>/<second>")
 def jedi(first,second):
     jedi=second[0:3]+first[0:2]
-    html = """
-        <h1>
-            Your Jedi name is: {}!
-        </h1>
-        
-    """
-    return html.format(jedi)
-
+    return render_template('jedi.html', jedi=jedi)
+    
+    
 if __name__ == "__main__":
-    app.run(host=environ['IP'],
-            port=int(environ['PORT']))
+   app.run(debug=True, host="0.0.0.0", port=8080)
